@@ -10,6 +10,7 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -23,19 +24,23 @@ import com.vaadin.ui.VerticalLayout;
  */
 @Theme("mytheme")
 public class MyUI extends UI {
-
+	Label label = new Label("");
+	
     @Override
     protected void init(VaadinRequest vaadinRequest) {
     	Label wel = new Label("Welcome to LearnMySQL");
-        final VerticalLayout layout = new VerticalLayout();
+    	Label label = new Label("");
+    	label.setId("Error");
+    	final VerticalLayout layout = new VerticalLayout();
          
         final TextField username = new TextField();
         username.setCaption("USERNAME");
-        final TextField password = new TextField();
+        final PasswordField password = new PasswordField();
         password.setCaption("USERNAME");
-        
+          
         Button login = new Button("Log In");
-       
+        setContent(layout);
+        
         login.setClickShortcut(KeyCode.ENTER);
         login.addClickListener(e -> {
         
@@ -43,11 +48,15 @@ public class MyUI extends UI {
         String pass = password.getValue();
         
         LoginTool lt = new LoginTool(user,pass);
-        
-        if(lt.verifyStudentDetails()==true) {
-        	   System.out.println("pizza");
+        if(lt.verifyStudentDetails()) {
+        	   setContent(new welcomeUI());
         	   
+       }else if(!lt.verifyStudentDetails()) {
+    	  label.setValue("Wrong Username or Password!");
+    	  layout.addComponent(label);
+    	  layout.setComponentAlignment(label, Alignment.MIDDLE_CENTER);
        }
+        
         }); 
         
         
@@ -57,6 +66,7 @@ public class MyUI extends UI {
         layout.setComponentAlignment(username, Alignment.MIDDLE_CENTER);
         layout.setComponentAlignment(password, Alignment.MIDDLE_CENTER);
         layout.setComponentAlignment(login, Alignment.MIDDLE_CENTER);
+            
         setContent(layout);
     }
 

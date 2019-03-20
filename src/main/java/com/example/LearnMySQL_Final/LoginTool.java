@@ -14,13 +14,14 @@ public class LoginTool {
 	public boolean verifyStudentDetails() {
 		Ldap  ldap = Ldap.connect("students", username, password);
 		Person u = ldap.getUser(username);
-		if(username == "admin" && password =="admin") {
+		if(username.equals("admin") && password.equals( "admin")) {
 			return true;
 		}
 		else if(u == null) {
 			return false;
 		}
 		else if(u != null){
+			User me = new User(u);
 			this.p = u;
 			return true;
 		}
